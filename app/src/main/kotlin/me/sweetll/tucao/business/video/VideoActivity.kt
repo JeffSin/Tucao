@@ -8,20 +8,20 @@ import android.app.SharedElementCallback
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.animation.FastOutSlowInInterpolator
-import android.support.v7.widget.Toolbar
+import androidx.core.view.ViewCompat
 import android.text.format.DateFormat
 import android.transition.*
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.google.android.material.appbar.AppBarLayout
 import com.shuyu.gsyvideoplayer.GSYPreViewManager
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer
@@ -97,6 +97,8 @@ class VideoActivity : BaseActivity(), DanmuVideoPlayer.DanmuPlayerHolder {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        Log.d("FFF", "[debug video] onCreate")
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_video)
         val hid = intent.getStringExtra(ARG_HID)
         val cover = intent.getStringExtra(ARG_COVER)
@@ -354,21 +356,34 @@ class VideoActivity : BaseActivity(), DanmuVideoPlayer.DanmuPlayerHolder {
 
     override fun onPause() {
         super.onPause()
+        Log.d("FFF", "[debug video] onPause")
         binding.player.onVideoPause(isPlay)
         isPause = true
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d("FFF", "[debug video] onResume")
         binding.player.onVideoResume()
         isPause = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("FFF", "[debug video] onDestroy")
         GSYVideoPlayer.releaseAllVideos()
         GSYPreViewManager.instance().releaseMediaPlayer()
         binding.player.onVideoDestroy()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("FFF", "[debug video] onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("FFF", "[debug video] onStop")
     }
 
     override fun onBackPressed() {
@@ -381,11 +396,12 @@ class VideoActivity : BaseActivity(), DanmuVideoPlayer.DanmuPlayerHolder {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (!binding.player.isIfCurrentIsFullscreen) {
-                    binding.player.startWindowFullscreen(this, true, true)
-                }
+        Log.d("FFF", "[debug video] onConfigurationChanged")
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (!binding.player.isIfCurrentIsFullscreen) {
+                binding.player.startWindowFullscreen(this, true, true)
             }
+        }
     }
 
     override fun onSendDanmu(stime: Float, message: String) {

@@ -7,30 +7,30 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.Toolbar
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.view.GravityCompat
+import androidx.appcompat.widget.Toolbar
 import android.text.method.ScrollingMovementMethod
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.archivepatcher.applier.FileByFileV1DeltaApplier
+import com.google.android.material.snackbar.Snackbar
 import com.orhanobut.dialogplus.DialogPlus
 import com.orhanobut.dialogplus.ViewHolder
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.BehaviorProcessor
@@ -135,7 +135,7 @@ class MainActivity : BaseActivity() {
                         }
                         R.id.btn_save_update -> {
                             // 省流量更新
-                            saveUpdate()
+                            // saveUpdate()
                             dialog.dismiss()
                         }
                     }
@@ -174,9 +174,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        AppApplication.get()
-                .getUserComponent()
-                .inject(this)
+        AndroidInjection.inject(this)
 
         EventBus.getDefault().register(this)
 
@@ -260,7 +258,7 @@ class MainActivity : BaseActivity() {
         drawerToggle.syncState()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
     }
@@ -419,6 +417,7 @@ class MainActivity : BaseActivity() {
                 }
     }
 
+    /*
     fun saveUpdate() {
         if (apkFile.exists()) {
             installFromFile(apkFile)
@@ -507,6 +506,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
     }
+    */
 
     fun installFromFile(file: File) {
         val intent = Intent(Intent.ACTION_VIEW)
